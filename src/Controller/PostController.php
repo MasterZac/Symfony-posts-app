@@ -84,7 +84,7 @@ class PostController extends AbstractController
     }
 
 
-    
+
     // #[Route('/post/{id}', name: 'app_post')]
     // public function index($id): Response
     // {

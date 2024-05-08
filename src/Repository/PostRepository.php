@@ -31,6 +31,16 @@ class PostRepository extends ServiceEntityRepository
         ');
     }
 
+    public function findPostAndUsers(){
+        return $this->getEntityManager()
+            ->createQuery('
+            SELECT post.id, post.title, post.descripcion, post.title, post.creation_date, post.url
+            FROM App/Entity/Post post
+            LEFT JOIN post.user user
+            ORDER BY post.id DESC
+            ');
+    }
+
 
     // public function findPost($id){
     //     return $this->getEntityManager()
