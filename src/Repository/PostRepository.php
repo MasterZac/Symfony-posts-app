@@ -25,19 +25,19 @@ class PostRepository extends ServiceEntityRepository
     public function findAllPosts(){
         return $this->getEntityManager()
         ->createQuery('
-            SELECT post.id, post.title, post.descripcion, post.file, post.creation_date, post.url
-            FROM App\Entity\Post post
-            ORDER BY post.id DESC
+        SELECT post.id, post.title, post.descripcion, post.file, post.creation_date, post.url
+        FROM App\Entity\Post post
+        ORDER BY post.id DESC
         ');
     }
 
     public function findPostAndUsers(){
         return $this->getEntityManager()
             ->createQuery('
-            SELECT post.id, post.title, post.descripcion, post.title, post.creation_date, post.url
-            FROM App/Entity/Post post
-            LEFT JOIN post.user user
-            ORDER BY post.id DESC
+                SELECT post, user
+                FROM App\Entity\Post post
+                JOIN post.user user
+                ORDER BY post.id DESC
             ');
     }
 

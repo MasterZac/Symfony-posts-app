@@ -71,7 +71,6 @@ class PostController extends AbstractController
             return $this->redirectToRoute('index');
         }
 
-
         return $this->render('post/index.html.twig', [
             'form' => $form->createView(),
             'posts' => $pagination
@@ -82,7 +81,7 @@ class PostController extends AbstractController
     public function postDetails(Post $post){
         return $this->render('post/post-details.html.twig', ['post' => $post]);
     }
-
+    
 
 
     // #[Route('/post/{id}', name: 'app_post')]
