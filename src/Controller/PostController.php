@@ -32,7 +32,7 @@ class PostController extends AbstractController
     public function index(Request $request, SluggerInterface $slugger, PaginatorInterface $paginator): Response
     {
         $post = new Post();
-        $query = $this->em->getRepository(Post::class)->findAllPosts();
+        $query = $this->em->getRepository(Post::class)->findPostAndUsers();
 
         $pagination = $paginator->paginate(
             $query, /* query NOT result */

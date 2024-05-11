@@ -43,4 +43,12 @@ class UserController extends AbstractController
             'registration_form' => $registration_form->createView() 
         ]);
     }
+
+    #[Route('/user/{id}', name: 'app_user')]
+    public function show(User $user): Response
+    {
+        return $this->render('user/index.html.twig', [
+            'user' => $user,
+        ]);
+    }
 }
