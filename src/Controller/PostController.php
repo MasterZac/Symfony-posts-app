@@ -6,11 +6,13 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Form\PostType;
 use DateTime;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +24,12 @@ class PostController extends AbstractController
 {
 
     private $em;
+    private $security;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, Security $security)
     {
         $this->em = $em;
+        $this->security = $security;
     }
 
     #[Route('/', name: 'index')]
@@ -64,11 +68,18 @@ class PostController extends AbstractController
             }
 
             $post->setUrl($url);
-            $user = $this->em->getRepository(User::class)->find(1);
-            $post->setUser($user);
-            $this->em->persist($post);
-            $this->em->flush();
-            return $this->redirectToRoute('index');
+            //Obtenemos el usuario actual autentificado
+            $user = $this->security->getUser();
+            if($user){
+                $post->setUser($user);
+                $this->em->persist($post);
+                $this->em->flush();
+                $this->addFlash('Succes', 'Post creado exitosamente');
+                return $this->redirectToRoute('index');
+            }else{
+                $this->addFlash('Error', 'Debes iniciar sesion para crear un post');
+                return $this->redirectToRoute('app_login');
+            }
         }
 
         return $this->render('post/index.html.twig', [
